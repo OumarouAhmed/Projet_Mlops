@@ -1,0 +1,6 @@
+stages:
+  prepare_data:
+    cmd: python -m src.data --download --split
+    outs:
+      - data/raw/breast_cancer.csv
+      - data/processed/train_test.npz

@@ -1,0 +1,13 @@
+schema: '2.0'
+stages:
+  prepare_data:
+    cmd: python -m src.data --download --split
+    outs:
+    - path: data/processed/train_test.npz
+      hash: md5
+      md5: e5f87ec296eec38fd26e63c308aee5f3
+      size: 142114
+    - path: data/raw/breast_cancer.csv
+      hash: md5
+      md5: 24d9881fad8cfb3d94f5276d372e422b
+      size: 121955

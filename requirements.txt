@@ -1,0 +1,11 @@
+fastapi
+joblib
+matplotlib
+mlflow
+numpy
+optuna
+pandas
+pydantic
+scikit-learn
+uvicorn
+zenml
