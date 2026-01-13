@@ -9,3 +9,5 @@ pydantic
 scikit-learn
 uvicorn
 zenml
+dvc
+dvc-s3
