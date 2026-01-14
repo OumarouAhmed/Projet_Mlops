@@ -1,15 +1,19 @@
-# Mini-projet MLOps – Classification cancer du sein
+﻿# Mini-projet MLOps â€“ Classification cancer du sein
 
-Objectif: pipeline complet (data → train → suivi d’expériences → déploiement) avec DVC, MLflow, ZenML et Docker.
+
+## Auteurs
+- Oumekelthoum Mohamed
+- Ahmed Oumarou
+Objectif: pipeline complet (data â†’ train â†’ suivi dâ€™expÃ©riences â†’ dÃ©ploiement) avec DVC, MLflow, ZenML et Docker.
 
 ## Structure
 - `src/`: scripts ML, Optuna, pipeline ZenML, API FastAPI
-- `data/`: données versionnées par DVC
-- `models/`: modèles (v1, v2, production)
+- `data/`: donnÃ©es versionnÃ©es par DVC
+- `models/`: modÃ¨les (v1, v2, production)
 - `artifacts/`: graphiques (confusion matrix, ROC)
 - `docker-compose.yml`: MLflow + API
 
-## Prérequis
+## PrÃ©requis
 - Python 3.10+
 - Docker + Docker Compose
 - DVC
@@ -21,8 +25,8 @@ python -m venv .venv
 pip install -r requirements.txt
 ```
 
-## Données + DVC
-1) Télécharger et préparer les données:
+## DonnÃ©es + DVC
+1) TÃ©lÃ©charger et prÃ©parer les donnÃ©es:
 ```bash
 python -m src.data --download --split
 ```
@@ -31,7 +35,7 @@ Ou via script:
 .\scripts\setup_data.ps1
 ```
 
-2) Initialiser DVC et tracker les données:
+2) Initialiser DVC et tracker les donnÃ©es:
 ```bash
 dvc init
 dvc add data/raw/breast_cancer.csv data/processed/train_test.npz
@@ -52,7 +56,7 @@ Pour reproduire sur une autre machine:
 dvc pull
 ```
 
-## Entraînement + MLflow
+## EntraÃ®nement + MLflow
 Basline v1 (Logistic Regression):
 ```bash
 python -m src.train --model logreg --C 1.0 --solver liblinear --run_name baseline --save_model models/v1/model.joblib
@@ -94,7 +98,7 @@ Ou via script:
 ```bash
 .\scripts\run_zenml.ps1
 ```
-Version recommandée (Windows): utiliser le venv et le script local:
+Version recommandÃ©e (Windows): utiliser le venv et le script local:
 ```bash
 .\scripts\run_zenml_local.ps1
 ```
@@ -102,17 +106,17 @@ Run variation ZenML (C=0.5):
 ```bash
 .\scripts\zenml_run_variation.ps1
 ```
-Si la création du user/stack bloque, lancer le login local (dans un autre terminal):
+Si la crÃ©ation du user/stack bloque, lancer le login local (dans un autre terminal):
 ```bash
 .\scripts\zenml_login_blocking.ps1
 ```
 Pour afficher les runs dans le dashboard local, garde le login en mode blocking
-et ouvre l’URL indiquée.
+et ouvre lâ€™URL indiquÃ©e.
 Exporter la liste des runs (JSON) pour preuve:
 ```bash
 .\scripts\zenml_runs_json.ps1
 ```
-Si tu as l’erreur `ModuleNotFoundError: zenml.zen_stores`, réinstalle ZenML dans un venv propre:
+Si tu as lâ€™erreur `ModuleNotFoundError: zenml.zen_stores`, rÃ©installe ZenML dans un venv propre:
 ```bash
 python -m venv .venv
 .\.venv\Scripts\python -m pip install -r requirements.txt
@@ -123,12 +127,12 @@ Remove-Item .\\.zenml -Recurse -Force
 .\.venv\Scripts\python -m src.zenml_pipeline --C 1.0
 ```
 
-## API d’inférence (local)
+## API dâ€™infÃ©rence (local)
 ```bash
 uvicorn src.api:app --reload
 ```
 
-Exemple de requête:
+Exemple de requÃªte:
 ```bash
 curl -X POST http://localhost:8000/predict ^
   -H "Content-Type: application/json" ^
@@ -136,9 +140,9 @@ curl -X POST http://localhost:8000/predict ^
 ```
 
 ## Docker Compose (API + MLflow)
-L’image API utilise `requirements-api.txt` pour limiter les dépendances Docker.
+Lâ€™image API utilise `requirements-api.txt` pour limiter les dÃ©pendances Docker.
 
-1) Mettre en production un modèle:
+1) Mettre en production un modÃ¨le:
 ```bash
 Copy-Item .\models\v1\model.joblib .\models\production\model.joblib
 ```
@@ -159,12 +163,12 @@ Ou via script:
 - MLflow: http://localhost:5000
 - API: http://localhost:8000
 
-## Captures à fournir
+## Captures Ã  fournir
 - MLflow: liste des runs + comparaison (baseline/variations/Optuna) + artefacts (confusion/ROC).
-- ZenML: dashboard avec pipeline + exécutions (au moins 2 runs).
-- DVC: commande `dvc pull` (ou `dvc repro`) + preuve des fichiers récupérés.
+- ZenML: dashboard avec pipeline + exÃ©cutions (au moins 2 runs).
+- DVC: commande `dvc pull` (ou `dvc repro`) + preuve des fichiers rÃ©cupÃ©rÃ©s.
 
-## Démo v1 → v2 → rollback
+## DÃ©mo v1 â†’ v2 â†’ rollback
 1) v1:
 ```bash
 Copy-Item .\models\v1\model.joblib .\models\production\model.joblib
@@ -176,7 +180,7 @@ Test /predict (capture).
 ```bash
 Copy-Item .\models\v2\model.joblib .\models\production\model.joblib
 ```
-Redémarrer le conteneur API et retester /predict.
+RedÃ©marrer le conteneur API et retester /predict.
 ```bash
 .\scripts\restart_api.ps1
 ```
@@ -185,7 +189,7 @@ Redémarrer le conteneur API et retester /predict.
 ```bash
 Copy-Item .\models\v1\model.joblib .\models\production\model.joblib
 ```
-Redémarrer l’API et retester /predict.
+RedÃ©marrer lâ€™API et retester /predict.
 ```bash
 .\scripts\restart_api.ps1
 ```
@@ -194,9 +198,9 @@ Script de test API:
 ```bash
 .\scripts\test_api.ps1
 ```
-Script démo v1 → v2 → rollback:
+Script dÃ©mo v1 â†’ v2 â†’ rollback:
 ```bash
 .\scripts\demo_rollback.ps1
 ```
 
-Le champ `model_version` est lu depuis `models/production/VERSION`. Les scripts de promotion l’écrivent automatiquement.
+Le champ `model_version` est lu depuis `models/production/VERSION`. Les scripts de promotion lâ€™Ã©crivent automatiquement.
